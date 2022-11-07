@@ -1,0 +1,29 @@
+.nav-game {
+    background: #eee;
+    width: 100vw;
+    display: flex;
+    justify-content: space-between;
+}
+
+.nav-game > * {
+    padding: 20px;
+    height: 100%;
+    width: auto;
+}
+
+.nav-game .buttons {
+    display: flex;
+}
+
+.nav-game a {
+    display: block;
+    margin: auto 10px;
+}
+
+.nav-game a > i {
+    color: #000;
+}
+
+.nav-game a > i {
+    color: #000;
+}
