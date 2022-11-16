@@ -15,22 +15,38 @@
 
         <!-- GAME -->
         <div class="game">
-            
+            <Row v-for="(rowI, index) in rowWord" :key="index"/>
         </div>
 
         <!-- KEYWORD -->
         <div>
-
+            
         </div>
      </div>
 </template>
 
 <script lang="ts">
-    export default {
+    import { defineComponent } from 'vue'
+    import Row from './Row.vue'
 
-    }
+    export default defineComponent({
+        components: {
+            Row
+        },
+        data() {
+            return {
+                rowWord: [1,2,3,4,5,6]
+            }
+        }
+    })
 </script>
 
-<style>
-
+<style scoped>
+    .game {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 1em;
+        gap: 0.5em;
+    }
 </style>

@@ -31,11 +31,10 @@
         data() {
             return {
                 profile: undefined,
-                showLanding: false,
-                showLogin: true,
+                showLanding: true,
+                showLogin: false,
             }
         },
-
         methods: {
             
         }

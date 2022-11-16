@@ -3,6 +3,10 @@
 @import './header.css';
 @import './game.css';
 
+:root {
+    --separacionLetter: 0.6em;
+}
+
 * {
     font-family: 'Poppins', Arial, Helvetica, sans-serif;
     margin: 0;
