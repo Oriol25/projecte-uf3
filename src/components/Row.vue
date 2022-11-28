@@ -1,7 +1,7 @@
 <template>
     <div class="row no-seleccionable">
-        <div v-for="(letter, index) in word" :key="index" :class="['letter', letter.status]">
-            {{letter.letter}}
+        <div v-for="(letter, index) in data" :key="index" :class="['letter', letter.status]">
+            {{letter.letter.toUpperCase()}}
         </div>
     </div>
 </template>
@@ -10,30 +10,9 @@
     import { defineComponent } from 'vue'
 
     export default defineComponent({
+        props: ['data'],
         data() {
             return {
-                word: [
-                    {
-                        letter: 'A',
-                        status: 'neutral',
-                    },
-                    {
-                        letter: 'B',
-                        status: 'warning'
-                    },
-                    {
-                        letter: 'C',
-                        status: 'success'
-                    },
-                    {
-                        letter: 'D',
-                        status: 'neutral'
-                    },
-                    {
-                        letter: 'E',
-                        status: 'neutral'
-                    }
-                ]
             }           
         }
     })
