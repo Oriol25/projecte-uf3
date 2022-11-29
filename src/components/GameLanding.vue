@@ -15,7 +15,9 @@
 
         <!-- GAME -->
         <div class="game">
-            <Row v-for="(rowI, index) in rowWord" :key="index"/>
+            <div v-for="(row, index) in rowletters" :key="index">
+                <Row :data="row"/>
+            </div>
         </div>
 
         <!-- KEYWORD -->
@@ -26,19 +28,31 @@
 </template>
 
 <script lang="ts">
-    import { defineComponent } from 'vue'
+    import { Vue, Options } from 'vue-class-component';
+    import { Prop } from 'vue-property-decorator';
     import Row from './Row.vue'
 
-    export default defineComponent({
+    type Letter = {
+        letter: String,
+        status: String
+    }
+
+    type Row = Letter[]
+
+    @Options({
         components: {
             Row
-        },
-        data() {
-            return {
-                rowWord: [1,2,3,4,5,6]
-            }
         }
     })
+    export default class GameLanding extends Vue {
+        
+        @Prop() readonly rowletters!: Row
+        
+        created() {
+
+        }
+        
+    }
 </script>
 
 <style scoped>

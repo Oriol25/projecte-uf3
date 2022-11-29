@@ -38,7 +38,7 @@
         text-align: center;
     }
 
-    .neutral {
+    .secondary {
         background: #eee;
     }
 

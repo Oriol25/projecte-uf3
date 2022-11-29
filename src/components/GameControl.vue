@@ -1,7 +1,13 @@
 <template>
     <div>
-        <Login v-if="showLogin" @profile="profile = $event"/>
-        <GameLanding v-if="showLanding"/>
+        <Login 
+            v-if="showLogin"
+            @profile="profile = $event"
+        />
+        <GameLanding 
+            v-if="showLanding"
+            :rowletters="rowLetters"
+        />
     </div>
 
 </template>
@@ -18,6 +24,13 @@
         email: String,
         tel: String
     }
+
+    type Letter = {
+        letter: String,
+        status: String
+    }
+
+    type Row = Letter[]
     
     @Options({
         components: {
@@ -26,13 +39,18 @@
         }
     })
     export default class GameControl extends Vue {
+        
+        showLogin: boolean = false
+        showLanding: boolean = true
+
         profile: Person = {
             name: '',
             email: '',
             tel: '',
         }
-        showLogin: boolean = true
-        showLanding: boolean = false
+
+        rowLetters: Row[] = []
+        
 
         @Watch('profile.name')
         onDataChanged(value: string, oldValue: string) {
@@ -42,6 +60,23 @@
             }
         }
 
+        created() {
+            this.addRow()
+        }
+
+        addRow() {
+            let row: Letter = {
+                letter: '',
+                status: 'secondary'
+            }
+
+            let rowLetter: Letter[] = []
+            for (var i = 0; i < 5; i++) {
+                rowLetter.push(row)
+            }
+
+            this.rowLetters.push(rowLetter)
+        }
 
     }
 </script>
