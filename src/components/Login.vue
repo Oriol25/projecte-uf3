@@ -4,19 +4,32 @@
 
 <script lang="ts">
     
-    import { defineComponent } from 'vue'
+    import { Vue } from 'vue-class-component';
+    import { Watch } from 'vue-property-decorator';
+
     import Swal from 'sweetalert2'
 
-    export default defineComponent({
-        data() {
-            return {
-                profile: {
-                    name: '',
-                    email: '',
-                    tel: ''
-                }
+    type Person = {
+        name: String,
+        email: String,
+        tel: String
+    }
+
+    export default class Login extends Vue {
+        profile: undefined | Person =  {
+            name: '',
+            email: '',
+            tel: ''
+        }
+
+        @Watch('profile.name')
+        onDataChanged(value: string, oldValue: string) {
+            if (this.profile?.name && this.profile?.email && this.profile?.tel) {
+                // EMIT
+                this.$emit('profile', this.profile)
             }
-        },
+        }
+
         created() {
             Swal.fire({
                 title: 'Registrarse',
@@ -43,40 +56,34 @@
                     return { name: nameInput.value, email: emailInput.value, tel: telInput.value }
                 },
             }).then((result) => {
-                this.profile.name = result.value?.name ?? ""
-                this.profile.email = result.value?.email ?? ""
-                this.profile.tel = result.value?.tel ?? ""
+
+                this.profile!.name = result.value?.name ?? ""
+                this.profile!.email = result.value?.email ?? ""
+                this.profile!.tel = result.value?.tel ?? ""
             })
-
-        },
-        mounted() {
-            this.$emit('profile', this.profile)
-        },
-        methods: {
-            validateName(name: String): boolean {  
-                if (!name) {
-                    return true
-                }
-                
-                return false
-            },
-            validateEmail(email: String): boolean {
-                /* if (!email && !email.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)) {
-                    return true
-                } */
-
-                return false
-
-            },
-            validateTel(tel: String): boolean {
-                /* if (!tel || isNaN(tel) || tel.length != 9) {
-                    return true
-                } */
-                
-                return false
-            }
         }
-    })
+
+        validateName(name: String): boolean {  
+            if (!name) {
+                return true
+            }
+            return false
+        }
+
+        validateEmail(email: String): boolean {
+            /* if (!email && !email.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)) {
+                return true
+            } */
+            return false
+        }
+        validateTel(tel: String): boolean {
+            /* if (!tel || isNaN(tel) || tel.length != 9) {
+                return true
+            } */
+            return false
+        }
+
+    }
 
 </script>
 
