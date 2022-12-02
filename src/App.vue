@@ -5,17 +5,14 @@
 </template>
 
 <script lang="ts">
-    import { Options, Vue } from 'vue-class-component'
+    import { defineComponent } from 'vue'
     import GameControl  from './components/GameControl.vue'
 
-    @Options({
+    export default defineComponent({
         components: {
             GameControl
         }
     })
-    export default class App extends Vue {
-            
-    }
 </script>
 
 <style>
