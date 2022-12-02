@@ -5,7 +5,7 @@
             <!-- STATISTICS -->
             <span><i class="fa-solid fa-chart-column fa-2xl"></i></span>
             <!-- TITLE -->
-            <h3>WORDLE</h3>
+            <h3>{{title}}</h3>
             <!-- RELOAD GAME & HELP -->
             <div class="buttons">
                 <span><i class="fa-solid fa-arrows-rotate fa-2xl"></i></span>
@@ -46,7 +46,8 @@
     })
     export default class GameLanding extends Vue {
         
-        @Prop() readonly rowletters!: Row
+        @Prop() readonly rowletters!: Row[]
+        @Prop() readonly title!: String
         
         created() {
 
