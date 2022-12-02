@@ -14,11 +14,17 @@
 </template>
 
 <script lang="ts">
-    import { Options, Vue } from 'vue-class-component'; // VUE-CLASS-COMPONENT CON OPCIONES DE LOS COMPONENTES DE VUE (Options)
-    import { Watch } from 'vue-property-decorator'; // ARREGLO PARA COMBINAR LAS CLASES DE VUE CON COMPONENTES DE VUE
+    import { Options, Vue } from 'vue-class-component'; // CONVIERTE LOS COMPONENTES EN CLASES
+    import { Watch } from 'vue-property-decorator'; // ARREGLO PARA AÑADIR LAS OPCIONES DE VUE DENTRO DE LAS CLASES 
     import $ from 'jquery' // JQUERY
+
     import GameLanding from './GameLanding.vue'
     import Login from './Login.vue'
+
+    /*
+     * https://www.primefaces.org/primevue/setup
+     * https://www.primefaces.org/primeflex/
+     */
 
     type Person = {
         name: String,
@@ -90,7 +96,7 @@
                         this.pushLetter(event.key)
                     }
                 } else if(event.code == 'Backspace') {
-                    // BORRAR ULTIMA LETRA
+                    // TODO: BORRAR ULTIMA LETRA
                 } else if (event.code == 'Enter') {
                     if (true) { // TODO: EL ROW ES COMPLETO?
                         if (true) {  // TODO: COMPROBAR SI LA PALABRA ES CORRECTA, FUNCION QUE DEVUELBA TRUE O FALSE + CAMBIO DE COLORES? NEGAR
