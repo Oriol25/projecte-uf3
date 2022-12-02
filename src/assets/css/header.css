@@ -15,12 +15,13 @@
     display: flex;
 }
 
-.nav-game a {
+.nav-game span {
     display: block;
     margin: auto 10px;
+    cursor: pointer;
 }
 
-.nav-game a > i {
+.nav-game span > i {
     color: #000;
 }
 
