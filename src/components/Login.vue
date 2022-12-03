@@ -6,7 +6,6 @@
     
     import { Vue } from 'vue-class-component';
     import { Watch } from 'vue-property-decorator';
-
     import Swal from 'sweetalert2'
 
     type Person = {
