@@ -19,10 +19,13 @@
     import { Watch } from 'vue-property-decorator'; // ARREGLO PARA AÑADIR LAS OPCIONES DE VUE DENTRO DE LAS CLASES 
     import $ from 'jquery' // JQUERY
     import { dic } from '../assets/js/diccionari';
+    /************* FINAL **************/
 
-    /************* COMPONENTES **************/
+
+    /************* COMPONENTS EXTERNS **************/
     import GameLanding from './GameLanding.vue'
     import Login from './Login.vue'
+    /************* FINAL **************/
 
     /*
      * https://www.primefaces.org/primevue/setup
@@ -41,8 +44,10 @@
         status: String
     }
 
-    type Row = Letter[]
+    type RowLetter = Letter[]
+    /************* FINAL **************/
     
+    /************* COMPONENT GAME CONTROL **************/
     @Options({
         components: {
             GameLanding,
@@ -63,7 +68,7 @@
             tel: '',
         }
 
-        rowLetters: Row[] = []        
+        rowLetters: RowLetter[] = []        
 
         @Watch('profile.name')
         onDataChanged(value: string, oldValue: string): void {
@@ -136,9 +141,8 @@
             this.rowLetters[rowLetter][index].letter = letter
 
         }
-
-
     }
+    /************* FINAL **************/
 </script>
 
 <style>
