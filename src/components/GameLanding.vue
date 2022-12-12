@@ -16,7 +16,7 @@
         <!-- GAME -->
         <div class="game">
             <div v-for="(row, index) in rowletters" :key="index">
-                <Row :data="row"/>
+                <Row :rowletter="row"/>
             </div>
 
             <div>
@@ -42,7 +42,7 @@
         status: String
     }
 
-    type Row = Letter[]
+    type RowLetter = Letter[]
 
     @Options({
         components: {
@@ -52,7 +52,7 @@
     })
     export default class GameLanding extends Vue {
         
-        @Prop() readonly rowletters!: Row[]
+        @Prop() readonly rowletters!: RowLetter[]
         @Prop() readonly title!: String
         
         created() {
