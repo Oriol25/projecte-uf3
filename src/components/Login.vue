@@ -19,6 +19,8 @@
             tel: ''
         }
 
+        errors: String[] = []
+
         @Watch('profile.name')
         onDataChanged(value: string, oldValue: string) {
             if (this.profile?.name && this.profile?.email && this.profile?.tel) {

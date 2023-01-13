@@ -18,6 +18,10 @@
             <div v-for="(row, index) in rowletters" :key="index">
                 <Row :rowletter="row"/>
             </div>
+
+            <div>
+                <Keyboard />
+            </div>
         </div>
 
         <!-- KEYWORD -->
@@ -30,6 +34,7 @@
 <script lang="ts">
     import { Vue, Options } from 'vue-class-component';
     import { Prop } from 'vue-property-decorator';
+    import Keyboard from './Keyboard.vue';
     import Row from './Row.vue'
 
     /************* TYPES **************/
@@ -38,7 +43,8 @@
 
     @Options({
         components: {
-            Row
+            Row,
+            Keyboard
         }
     })
     export default class GameLanding extends Vue {
