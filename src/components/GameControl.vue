@@ -17,7 +17,7 @@
     /************* LLIBRERIES **************/
     import { Options, Vue } from 'vue-class-component'; // CONVIERTE LOS COMPONENTES EN CLASES
     import { Watch } from 'vue-property-decorator'; // ARREGLO PARA AÑADIR LAS OPCIONES DE VUE DENTRO DE LAS CLASES 
-    import $ from 'jquery' // JQUERY
+    import $ from 'jquery'; // JQUERY
     import { dic } from '../assets/js/diccionari';
     /************* FINAL **************/
 
@@ -28,23 +28,12 @@
     /************* FINAL **************/
 
     /*
-     * https://www.primefaces.org/primevue/setup
+     * https://www.primefaces.org/  /setup
      * https://www.primefaces.org/primeflex/
     */
 
     /************* TYPES **************/
-    type Person = {
-        name: String,
-        email: String,
-        tel: String
-    }
-
-    type Letter = {
-        letter: String,
-        status: String
-    }
-
-    type RowLetter = Letter[]
+    import * as customType from '../types/types'
     /************* FINAL **************/
     
     /************* COMPONENT GAME CONTROL **************/
@@ -62,13 +51,13 @@
         showLogin: boolean = false
         showLanding: boolean = true
 
-        profile: Person = {
+        profile: customType.Person = {
             name: '',
             email: '',
             tel: '',
         }
 
-        rowLetters: RowLetter[] = []        
+        rowLetters: customType.RowLetter[] = []        
 
         @Watch('profile.name')
         onDataChanged(value: string, oldValue: string): void {
@@ -85,10 +74,10 @@
 
         addRow(): void {
 
-            let rowLetter: Letter[] = []
+            let rowLetter: customType.Letter[] = []
 
             for (var i = 0; i < 5; i++) {
-                const row: Letter = {
+                const row: customType.Letter = {
                     letter: '',
                     status: 'secondary'
                 }
@@ -98,30 +87,47 @@
             this.rowLetters.push(rowLetter)
         }
 
-        listenerKeyword(event: any) : void { // TODO: QUE TYPE UTILIZA EL event, CAMBIAR TYPE ANY
-            if (true) { // TODO: ESTOY JUGANDO?
-                if (event.code.startsWith('Key') || event.code == 'Backslash') {
-                    if (true) { // TODO: SI HAGO UNA COMBINACION DE LETRAS COMO CTRL + R, CTRL + C etc. NEGAR
-                        this.pushLetter(event.key)
+        listenerKeyword(event: any) : void { // TODO: QUE TYPE UTILIZA EL event, CAMBIAR TYPE ANY -- IDK
+            if (false) { // TODO: NO ESTOY JUGANDO?
+                return;
+            }
+
+            if (event.code.startsWith('Key') || event.code == 'Backslash') {
+                if (false) { // TODO: SI HAGO UNA COMBINACION DE LETRAS COMO CTRL + R, CTRL + C etc. NEGAR -- COMO SE HACE ESO IDK
+                   return; 
+                }
+
+                this.pushLetter(event.key)
+
+                return;
+            }
+
+            if(event.code == 'Backspace') {
+                if (false) { // NO HAY UNA LETRA EN EL ROW?
+                    return;
+                }
+                // TODO: BORRAR ULTIMA LETRA
+                return;
+            }
+
+            if (event.code == 'Enter') {
+                if (false) { // TODO: EL ROW ES INCOMPLETO?
+                    return;
+                }
+
+                if (this.rowLetters.length < 5) {
+                    this.addRow()
+                    
+                    if (false) { // HE GANADO?
+                        return;
                     }
-                } else if(event.code == 'Backspace') {
-                    // TODO: BORRAR ULTIMA LETRA
-                } else if (event.code == 'Enter') {
-                    if (true) { // TODO: EL ROW ES COMPLETO?
-                        if (true) {  // TODO: COMPROBAR SI LA PALABRA ES CORRECTA, FUNCION QUE DEVUELBA TRUE O FALSE + CAMBIO DE COLORES? NEGAR
-                            if (this.rowLetters.length < 5) {
-                                this.addRow()
-                            } else {
-                                // TODO: PIERDO?
-                            }
-                        } else {
-                            // TODO: GANO?
-                        }
+
+                    if (false) { // HE PERDIDO?
+
                     }
+
                 }
             }
-            
-            
         }
 
         pushLetter(letter: String): void {
@@ -129,7 +135,7 @@
             const rowLetter = this.rowLetters.length-1
             const lastPostionLetter = 4
 
-            let index: number = this.rowLetters[rowLetter].findIndex(function (element: Letter): boolean {
+            let index: number = this.rowLetters[rowLetter].findIndex(function (element: customType.Letter): boolean {
                 return element.letter == ''
             })
 

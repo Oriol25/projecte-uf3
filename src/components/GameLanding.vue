@@ -32,12 +32,9 @@
     import { Prop } from 'vue-property-decorator';
     import Row from './Row.vue'
 
-    type Letter = {
-        letter: String,
-        status: String
-    }
-
-    type RowLetter = Letter[]
+    /************* TYPES **************/
+    import { RowLetter } from '../types/types'
+    /************* FINAL **************/
 
     @Options({
         components: {

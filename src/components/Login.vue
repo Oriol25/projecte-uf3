@@ -8,11 +8,9 @@
     import { Watch } from 'vue-property-decorator';
     import Swal from 'sweetalert2'
 
-    type Person = {
-        name: String,
-        email: String,
-        tel: String
-    }
+    /************* TYPES **************/
+    import { Person } from '../types/types'
+    /************* FINAL **************/
 
     export default class Login extends Vue {
         profile: undefined | Person =  {

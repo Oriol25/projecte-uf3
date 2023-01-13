@@ -10,12 +10,9 @@
     import { Vue } from 'vue-class-component';
     import { Prop } from 'vue-property-decorator';
 
-    type Letter = {
-        letter: String,
-        status: String
-    }
-
-    type RowLetter = Letter[]
+    /************* TYPES **************/
+    import { RowLetter } from '../types/types'
+    /************* FINAL **************/
 
     export default class Row extends Vue {
         
@@ -56,11 +53,5 @@
         background: green;
     }
 
-    .no-seleccionable {
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none; 
-    }
 
 </style>
