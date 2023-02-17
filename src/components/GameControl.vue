@@ -8,6 +8,7 @@
             v-if="showLanding"
             :rowletters="rowLetters"
             :title="title"
+            @keywordletter = "listenerKeywordScreen"
         />
     </div>
 
@@ -47,6 +48,7 @@
         
         title: String = 'WORDLE'
         diccionari: String[] = dic
+        misteryWord: String = 'BARRO'
 
         showLogin: boolean = false
         showLanding: boolean = true
@@ -70,6 +72,65 @@
         created(): void {
             this.addRow()
             $(document).on("keyup", this.listenerKeyword)
+            // this.palabra()
+            console.log(this.misteryWord)
+        }
+
+        palabra(): void {
+            let randomNumber =  Math.floor(Math.random() * this.diccionari.length);
+            this.misteryWord = this.diccionari[randomNumber].toUpperCase()
+        }
+
+        listenerKeywordScreen(letter: string): void {
+            if(letter != 'ENTER' && letter != '-'){
+                this.pushLetter(letter)
+            }
+            
+            if (letter == 'ENTER') {
+                if (this.rowLetters[this.rowLetters.length - 1][4].letter == '') {
+                    return;
+                }
+
+                if (this.rowLetters.length < 5) {
+                    let splitMisteryWord = this.misteryWord.split("")
+                    let splitWord: any[] = []; // TODO: TYPE
+                    
+                    splitMisteryWord.forEach((element, index) => {
+                        splitWord.push(this.rowLetters[this.rowLetters.length - 1][index].letter)
+                    })
+                    
+                    let perfectMatch : any[] = []; // aquí guardamos los elementos exactos
+                    let almostMatch : any[] = []; 
+
+                    splitWord.forEach((elemento, indice) => {
+                        if (elemento == splitMisteryWord[indice]) {
+                            perfectMatch.push(elemento);
+                            this.rowLetters[this.rowLetters.length - 1][indice].status = "success"  // existe en esa misma posición
+                        } else if (splitMisteryWord.indexOf(elemento) > -1) {
+                            almostMatch.push(elemento);  // existe pero en otra posición
+                            this.rowLetters[this.rowLetters.length - 1][indice].status = "warning"  // existe en esa misma posición
+                        }
+                    });
+
+                    if (perfectMatch.length == splitWord.length) { // HE GANADO?
+                        alert('HAS  GANADO');
+                        return;
+                    }
+                    
+                    this.addRow()
+                } else {
+                    alert('HAS  PERDIDO');
+                    return;
+                }
+            }
+
+            if (letter == '-'){
+                if (this.rowLetters[this.rowLetters.length - 1][0].letter == '') {
+                    return;
+                }
+
+                this.unpushLetter()
+            }
         }
 
         addRow(): void {
@@ -93,25 +154,22 @@
             }
 
             if (event.code.startsWith('Key') || event.code == 'Backslash') {
-                if (false) { // TODO: SI HAGO UNA COMBINACION DE LETRAS COMO CTRL + R, CTRL + C etc. NEGAR -- COMO SE HACE ESO IDK
-                   return; 
-                }
-
                 this.pushLetter(event.key)
 
                 return;
             }
 
             if(event.code == 'Backspace') {
-                if (false) { // NO HAY UNA LETRA EN EL ROW?
+                if (this.rowLetters[this.rowLetters.length - 1][0].letter == '') {
                     return;
                 }
-                // TODO: BORRAR ULTIMA LETRA
+                this.unpushLetter();
+
                 return;
             }
 
             if (event.code == 'Enter') {
-                if (false) { // TODO: EL ROW ES INCOMPLETO?
+                if (this.rowLetters[this.rowLetters.length - 1][4].letter == '') {
                     return;
                 }
 
@@ -146,6 +204,22 @@
 
             this.rowLetters[rowLetter][index].letter = letter
 
+        }
+
+        unpushLetter(): void {
+            const rowLetter = this.rowLetters.length-1
+            const lastPostionLetter = 4
+
+            let index: number = this.rowLetters[rowLetter].findIndex(function (element: customType.Letter): boolean {
+                return element.letter == ''
+            })
+
+            if (index === -1) {
+                this.rowLetters[rowLetter][lastPostionLetter].letter = ''
+                return
+            }
+
+            this.rowLetters[rowLetter][index-1].letter = ''
         }
     }
     /************* FINAL **************/

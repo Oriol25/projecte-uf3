@@ -20,7 +20,8 @@
             </div>
 
             <div>
-                <Keyboard />
+                <Keyboard 
+                @keywordletter = "listenerKeywordScreen"/>
             </div>
         </div>
 
@@ -54,6 +55,10 @@
         
         created() {
 
+        }
+
+        listenerKeywordScreen(letter: string): void {
+            this.$emit('keywordletter', letter)
         }
         
     }
