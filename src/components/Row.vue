@@ -26,7 +26,7 @@
     .row {
         display: flex;
         flex-direction: row;
-        gap: var(--separacionLetter);
+        gap: 0.5em;
 
     }
     .letter {

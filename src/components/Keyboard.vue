@@ -54,4 +54,30 @@ export default class GameControl extends Vue {
     .enter-button {
         width: 105px;
     }
+
+    @media only screen and (max-width: 600px) {
+        .letter-keyboard {
+            width: 40px;
+            height: 40px;
+            font-size: 15px;
+            line-height: 40px;
+        }
+
+        .enter-button {
+            width: 85px;
+        }
+    }
+
+    @media only screen and (max-width: 550px) {
+        .letter-keyboard {
+            width: 30px;
+            height: 30px;
+            font-size: 15px;
+            line-height: 30px;
+        }
+
+        .enter-button {
+            width: 65px;
+        }
+    }
 </style>
