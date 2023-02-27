@@ -53,5 +53,9 @@
         background: green;
     }
 
+    .default_error {
+        background: rgb(95, 95, 95);
+    }
+
 
 </style>

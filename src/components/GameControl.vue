@@ -20,6 +20,7 @@
     import { Watch } from 'vue-property-decorator'; // ARREGLO PARA AÑADIR LAS OPCIONES DE VUE DENTRO DE LAS CLASES 
     import $ from 'jquery'; // JQUERY
     import { dic } from '../assets/js/diccionari';
+    import Swal from 'sweetalert2'
     /************* FINAL **************/
 
 
@@ -49,6 +50,10 @@
         title: String = 'WORDLE'
         diccionari: String[] = dic
         misteryWord: String = 'BARRO'
+        contador: number = 1
+        time_counter: number = 0
+        timeout: number = 0
+        timer_on: boolean = false
 
         showLogin: boolean = false
         showLanding: boolean = true
@@ -66,14 +71,14 @@
             if (this.profile.name && this.profile.email && this.profile.tel) {
                 this.showLogin = false
                 this.showLanding = true
-            }
+            }   
         }
 
         created(): void {
             this.addRow()
             $(document).on("keyup", this.listenerKeyword)
-            // this.palabra()
             console.log(this.misteryWord)
+            this.startCount()
         }
 
         palabra(): void {
@@ -88,6 +93,11 @@
             
             if (letter == 'ENTER') {
                 if (this.rowLetters[this.rowLetters.length - 1][4].letter == '') {
+                    Swal.fire(
+                        'Tienes que completar la palabra',
+                        'No puedes dejar celdas vacías, porfavor acaba de escribir la palabra',
+                        'error'
+                    )
                     return;
                 }
 
@@ -99,6 +109,16 @@
                         splitWord.push(this.rowLetters[this.rowLetters.length - 1][index].letter)
                     })
                     
+                    if(this.diccionari.indexOf(splitWord.join("").toLowerCase()) == -1) {
+                        Swal.fire(
+                            'Esta palabra no existe en el diccionario',
+                            '',
+                            'error'
+                        )
+
+                        return;
+                    }
+
                     let perfectMatch : any[] = []; // aquí guardamos los elementos exactos
                     let almostMatch : any[] = []; 
 
@@ -109,14 +129,21 @@
                         } else if (splitMisteryWord.indexOf(elemento) > -1) {
                             almostMatch.push(elemento);  // existe pero en otra posición
                             this.rowLetters[this.rowLetters.length - 1][indice].status = "warning"  // existe en esa misma posición
+                        } else {
+                            this.rowLetters[this.rowLetters.length - 1][indice].status = "default_error"
                         }
                     });
 
                     if (perfectMatch.length == splitWord.length) { // HE GANADO?
-                        alert('HAS  GANADO');
+                        this.stopCount()
+                        Swal.fire(
+                            'Enhorabuena! Has ganado!',
+                            `Lo has conseguido en ${this.contador} intentos  <br> y en ${this.time_counter} segundos`,
+                            'success'
+                        )
                         return;
                     }
-                    
+                    this.contador++
                     this.addRow()
                 } else {
                     alert('HAS  PERDIDO');
@@ -220,6 +247,23 @@
             }
 
             this.rowLetters[rowLetter][index-1].letter = ''
+        }
+
+        timedCount() {
+            this.time_counter++;
+            this.timeout = setTimeout(this.timedCount, 1000);
+        }
+
+        startCount() {
+            if (!this.timer_on) {
+                this.timer_on = true;
+                this.timedCount();
+            }
+        }
+
+        stopCount() {
+            clearTimeout(this.timeout);
+            this.timer_on = false;
         }
     }
     /************* FINAL **************/
