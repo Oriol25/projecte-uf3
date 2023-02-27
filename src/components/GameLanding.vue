@@ -15,20 +15,18 @@
 
         <!-- GAME -->
         <div class="game">
-            <div v-for="(row, index) in rowletters" :key="index">
-                <Row :rowletter="row"/>
+            <div class="rows">
+                <div v-for="(row, index) in rowletters" :key="index">
+                    <Row :rowletter="row"/>
+                </div>
             </div>
+            
 
-            <div>
+            <div class="keyword">
                 <Keyboard 
                     @keywordletter = "listenerKeywordScreen"
                 />
             </div>
-        </div>
-
-        <!-- KEYWORD -->
-        <div>
-            
         </div>
      </div>
 </template>
@@ -71,6 +69,12 @@
         flex-direction: column;
         align-items: center;
         margin-top: 1em;
+        gap: 0.5em;
+    }
+
+    .rows {
+        display: flex;
+        flex-direction: column;
         gap: 0.5em;
     }
 
