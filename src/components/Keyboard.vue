@@ -1,29 +1,27 @@
 <template>
-    <div class="row" v-for="(i, index) in arrayLetters" :key="index">
+    <div class="row" v-for="(i, index) in keyword" :key="index">
         <button v-for="(k, ind) in i" :key="ind" @click="getLetter(k)" class="letter-keyboard">
-            {{k}}
+            {{k.key}}
         </button>
     </div>
 </template>
 
-<script>
-    import { defineComponent } from 'vue'
+<script lang="ts">
 
-    export default defineComponent({
-        data() {
-            return {
-                arrayLetters: [['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
-                               ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Ç'],
-                               ['ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '-']],
-                    }           
-        },
-        methods: {
-            getLetter(letter){
-                this.$emit('keywordletter', letter)
-            }
-        }
-        
-    })
+import { Vue } from 'vue-class-component'; // CONVIERTE LOS COMPONENTES EN CLASES
+
+import { arrayLetters } from '../assets/js/keyword';
+import { LetterPress } from '../types/types';
+
+export default class GameControl extends Vue {
+
+    keyword: LetterPress[][] = arrayLetters;
+
+    getLetter(letter: LetterPress) {
+        this.$emit("keywordletter", letter);
+    }
+
+}
 </script>
 
 <style>

@@ -21,7 +21,8 @@
 
             <div>
                 <Keyboard 
-                @keywordletter = "listenerKeywordScreen"/>
+                    @keywordletter = "listenerKeywordScreen"
+                />
             </div>
         </div>
 

@@ -8,7 +8,7 @@
             v-if="showLanding"
             :rowletters="rowLetters"
             :title="title"
-            @keywordletter = "listenerKeywordScreen"
+            @keywordletter = "listenerKeyword"
         />
     </div>
 
@@ -76,7 +76,7 @@
 
         created(): void {
             this.addRow()
-            $(document).on("keyup", this.listenerKeyword)
+            $(document).on("keyup", this.listenerKeyword);
             console.log(this.misteryWord)
             this.startCount()
         }
@@ -86,12 +86,16 @@
             this.misteryWord = this.diccionari[randomNumber].toUpperCase()
         }
 
-        listenerKeywordScreen(letter: string): void {
-            if(letter != 'ENTER' && letter != '-'){
-                this.pushLetter(letter)
+        listenerKeyword({code, key}: customType.LetterPress): void {
+            if (false) { // DURANTE LOS SWAL NO PODER ESCRIBIR
+                return;
+            }
+
+            if(code != 'Enter' && code != 'Backspace' && code.startsWith('Key')){
+                this.pushLetter(key.toUpperCase())
             }
             
-            if (letter == 'ENTER') {
+            if (code == 'Enter') {
                 if (this.rowLetters[this.rowLetters.length - 1][4].letter == '') {
                     Swal.fire(
                         'Tienes que completar la palabra',
@@ -101,7 +105,7 @@
                     return;
                 }
 
-                if (this.rowLetters.length < 5) {
+                if (this.rowLetters.length < 6) {
                     let splitMisteryWord = this.misteryWord.split("")
                     let splitWord: any[] = []; // TODO: TYPE
                     
@@ -151,7 +155,7 @@
                 }
             }
 
-            if (letter == '-'){
+            if (code == 'Backspace'){
                 if (this.rowLetters[this.rowLetters.length - 1][0].letter == '') {
                     return;
                 }
@@ -173,46 +177,6 @@
             }
 
             this.rowLetters.push(rowLetter)
-        }
-
-        listenerKeyword(event: any) : void { // TODO: QUE TYPE UTILIZA EL event, CAMBIAR TYPE ANY -- IDK
-            if (false) { // TODO: NO ESTOY JUGANDO?
-                return;
-            }
-
-            if (event.code.startsWith('Key') || event.code == 'Backslash') {
-                this.pushLetter(event.key)
-
-                return;
-            }
-
-            if(event.code == 'Backspace') {
-                if (this.rowLetters[this.rowLetters.length - 1][0].letter == '') {
-                    return;
-                }
-                this.unpushLetter();
-
-                return;
-            }
-
-            if (event.code == 'Enter') {
-                if (this.rowLetters[this.rowLetters.length - 1][4].letter == '') {
-                    return;
-                }
-
-                if (this.rowLetters.length < 5) {
-                    this.addRow()
-                    
-                    if (false) { // HE GANADO?
-                        return;
-                    }
-
-                    if (false) { // HE PERDIDO?
-
-                    }
-
-                }
-            }
         }
 
         pushLetter(letter: String): void {

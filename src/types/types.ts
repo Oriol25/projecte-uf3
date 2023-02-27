@@ -10,3 +10,8 @@ export type Letter = {
 }
 
 export type RowLetter = Letter[]
+
+export type LetterPress = {
+    code: String,
+    key: String
+};
