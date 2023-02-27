@@ -16,7 +16,13 @@
         <!-- GAME -->
         <div class="game">
             <div v-for="(row, index) in rowletters" :key="index">
-                <Row :data="row"/>
+                <Row :rowletter="row"/>
+            </div>
+
+            <div>
+                <Keyboard 
+                    @keywordletter = "listenerKeywordScreen"
+                />
             </div>
         </div>
 
@@ -30,27 +36,30 @@
 <script lang="ts">
     import { Vue, Options } from 'vue-class-component';
     import { Prop } from 'vue-property-decorator';
+    import Keyboard from './Keyboard.vue';
     import Row from './Row.vue'
 
-    type Letter = {
-        letter: String,
-        status: String
-    }
-
-    type Row = Letter[]
+    /************* TYPES **************/
+    import { RowLetter } from '../types/types'
+    /************* FINAL **************/
 
     @Options({
         components: {
-            Row
+            Row,
+            Keyboard
         }
     })
     export default class GameLanding extends Vue {
         
-        @Prop() readonly rowletters!: Row[]
+        @Prop() readonly rowletters!: RowLetter[]
         @Prop() readonly title!: String
         
         created() {
 
+        }
+
+        listenerKeywordScreen(letter: string): void {
+            this.$emit('keywordletter', letter)
         }
         
     }

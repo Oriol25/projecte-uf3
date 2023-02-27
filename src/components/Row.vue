@@ -1,21 +1,24 @@
 <template>
     <div class="row no-seleccionable">
-        <div v-for="(letter, index) in data" :key="index" :class="['letter', letter.status]">
+        <div v-for="(letter, index) in rowletter" :key="index" :class="['letter', letter.status]">
             {{letter.letter.toUpperCase()}}
         </div>
     </div>
 </template>
 
 <script lang="ts">
-    import { defineComponent } from 'vue'
+    import { Vue } from 'vue-class-component';
+    import { Prop } from 'vue-property-decorator';
 
-    export default defineComponent({
-        props: ['data'],
-        data() {
-            return {
-            }           
-        }
-    })
+    /************* TYPES **************/
+    import { RowLetter } from '../types/types'
+    /************* FINAL **************/
+
+    export default class Row extends Vue {
+        
+        @Prop() readonly rowletter!: RowLetter
+        
+    }
 
 </script>
 
@@ -50,11 +53,9 @@
         background: green;
     }
 
-    .no-seleccionable {
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none; 
+    .default_error {
+        background: rgb(95, 95, 95);
     }
+
 
 </style>

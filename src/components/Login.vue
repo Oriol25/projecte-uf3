@@ -6,14 +6,11 @@
     
     import { Vue } from 'vue-class-component';
     import { Watch } from 'vue-property-decorator';
-
     import Swal from 'sweetalert2'
 
-    type Person = {
-        name: String,
-        email: String,
-        tel: String
-    }
+    /************* TYPES **************/
+    import { Person } from '../types/types'
+    /************* FINAL **************/
 
     export default class Login extends Vue {
         profile: undefined | Person =  {
@@ -21,6 +18,8 @@
             email: '',
             tel: ''
         }
+
+        errors: String[] = []
 
         @Watch('profile.name')
         onDataChanged(value: string, oldValue: string) {
