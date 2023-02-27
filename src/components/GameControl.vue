@@ -10,6 +10,14 @@
             :title="title"
             @keywordletter = "listenerKeyword"
         />
+        <ShowSwal 
+            v-if="stopListener"
+            :state="stopListener"
+            :title="titleSwal"
+            :desc="descSwal"
+            :type="typeSwal"
+            @closeModal="toggleModal"
+         />
     </div>
 
 </template>
@@ -23,10 +31,10 @@
     import Swal from 'sweetalert2'
     /************* FINAL **************/
 
-
     /************* COMPONENTS EXTERNS **************/
     import GameLanding from './GameLanding.vue'
     import Login from './Login.vue'
+    import ShowSwal from './ShowSwal.vue'
     /************* FINAL **************/
 
     /*
@@ -42,7 +50,8 @@
     @Options({
         components: {
             GameLanding,
-            Login
+            Login,
+            ShowSwal
         }, 
     })
     export default class GameControl extends Vue {
@@ -58,6 +67,11 @@
         showLogin: boolean = false
         showLanding: boolean = true
 
+        stopListener: boolean = false;
+        titleSwal: string = ""
+        descSwal: string = ""
+        typeSwal: string = ""
+
         profile: customType.Person = {
             name: '',
             email: '',
@@ -67,7 +81,7 @@
         rowLetters: customType.RowLetter[] = []        
 
         @Watch('profile.name')
-        onDataChanged(value: string, oldValue: string): void {
+        onDataChanged(): void {
             if (this.profile.name && this.profile.email && this.profile.tel) {
                 this.showLogin = false
                 this.showLanding = true
@@ -87,7 +101,7 @@
         }
 
         listenerKeyword({code, key}: customType.LetterPress): void {
-            if (false) { // DURANTE LOS SWAL NO PODER ESCRIBIR
+            if (this.stopListener) { // DURANTE LOS SWAL NO SE PUEDE ESCRIBIR
                 return;
             }
 
@@ -97,28 +111,30 @@
             
             if (code == 'Enter') {
                 if (this.rowLetters[this.rowLetters.length - 1][4].letter == '') {
-                    Swal.fire(
-                        'Tienes que completar la palabra',
-                        'No puedes dejar celdas vacías, porfavor acaba de escribir la palabra',
-                        'error'
-                    )
+                    this.toggleModal(
+                        true, 
+                        "Tienes que completar la palabra", 
+                        "No puedes dejar celdas vacías, porfavor acaba de escribir la palabra", 
+                        "error"
+                    );
                     return;
                 }
 
                 if (this.rowLetters.length < 6) {
                     let splitMisteryWord = this.misteryWord.split("")
-                    let splitWord: any[] = []; // TODO: TYPE
+                    let splitWord: String[] = [];
                     
                     splitMisteryWord.forEach((element, index) => {
                         splitWord.push(this.rowLetters[this.rowLetters.length - 1][index].letter)
                     })
                     
                     if(this.diccionari.indexOf(splitWord.join("").toLowerCase()) == -1) {
-                        Swal.fire(
-                            'Esta palabra no existe en el diccionario',
-                            '',
-                            'error'
-                        )
+                        this.toggleModal(
+                            true, 
+                            "Esta palabra no existe en el diccionario", 
+                            "", 
+                            "error"
+                        );
 
                         return;
                     }
@@ -130,7 +146,7 @@
                         if (elemento == splitMisteryWord[indice]) {
                             perfectMatch.push(elemento);
                             this.rowLetters[this.rowLetters.length - 1][indice].status = "success"  // existe en esa misma posición
-                        } else if (splitMisteryWord.indexOf(elemento) > -1) {
+                        } else if (splitMisteryWord.indexOf(elemento as string) > -1) {
                             almostMatch.push(elemento);  // existe pero en otra posición
                             this.rowLetters[this.rowLetters.length - 1][indice].status = "warning"  // existe en esa misma posición
                         } else {
@@ -140,11 +156,12 @@
 
                     if (perfectMatch.length == splitWord.length) { // HE GANADO?
                         this.stopCount()
-                        Swal.fire(
-                            'Enhorabuena! Has ganado!',
-                            `Lo has conseguido en ${this.contador} intentos  <br> y en ${this.time_counter} segundos`,
-                            'success'
-                        )
+                        this.toggleModal(
+                            true, 
+                            "Enhorabuena! Has ganado!", 
+                            "Lo has conseguido en ${this.contador} intentos  <br> y en ${this.time_counter} segundos", 
+                            "success"
+                        );
                         return;
                     }
                     this.contador++
@@ -211,6 +228,13 @@
             }
 
             this.rowLetters[rowLetter][index-1].letter = ''
+        }
+
+        toggleModal(state = false, title = "", desc = "", type = ""): void {
+            this.stopListener = state;
+            this.titleSwal = title;
+            this.descSwal = desc;
+            this.typeSwal = type
         }
 
         timedCount() {
