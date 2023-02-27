@@ -1,6 +1,12 @@
 <template>
     <div class="row" v-for="(i, index) in keyword" :key="index">
-        <button v-for="(k, ind) in i" :key="ind" @click="getLetter(k)" class="letter-keyboard">
+        <button 
+            v-for="(k, ind) in i" 
+            :key="ind" 
+            @click="getLetter(k)" 
+            class="letter-keyboard"
+            :class="k.code == 'Enter' ? 'enter-button' : ''"
+        >
             {{k.key}}
         </button>
     </div>
@@ -43,5 +49,9 @@ export default class GameControl extends Vue {
         font-size: 25px;
         text-align: center;
         line-height: 50px;
+    }
+
+    .enter-button {
+        width: 105px;
     }
 </style>
