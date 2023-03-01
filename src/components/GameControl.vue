@@ -176,7 +176,11 @@
                         this.contador++
                         this.addRow()
                     } else {
-                        alert('HAS  PERDIDO');
+                        Swal.fire(
+                                'Ups! Has perdido!',
+                                `Vuelve a intentarlo`,
+                                'error'
+                            )
                         this.ingame = false
                         return;
                     }
