@@ -15,6 +15,14 @@
             @keywordletter = "listenerKeyword"
             @newGame = "newGame"
         />
+
+        <ShowSwal 
+            v-if="isShowingAlert && !imTrolling"
+            :title="titleSwal"
+            :desc="descSwal"
+            :type="typeSwal"
+            @closeModal="toggleModal"
+         />
     </div>
 
 </template>
@@ -32,6 +40,7 @@
     /************* COMPONENTS EXTERNS **************/
     import GameLanding from './GameLanding.vue'
     import Login from './Login.vue'
+    import ShowSwal from './ShowSwal.vue'
     /************* FINAL **************/
 
     /*
@@ -47,7 +56,8 @@
     @Options({
         components: {
             GameLanding,
-            Login
+            Login,
+            ShowSwal
         }, 
     })
     export default class GameControl extends Vue {
@@ -71,6 +81,13 @@
         ingame: boolean = false
         first_stats : boolean = true
 
+        isShowingAlert: boolean = false
+        titleSwal: string = ""
+        descSwal: string = ""
+        typeSwal: string = ""
+
+        imTrolling: boolean = false
+
         profile: customType.Person = {
             name: '',
             email: '',
@@ -86,8 +103,15 @@
                 this.showLanding = true
                 this.newGame();
             }   
+        }
 
-        
+        @Watch('isShowingAlert')
+        onDataShowingAlertChanged(value: boolean, oldValue: boolean): void {
+            if (oldValue && !value) {
+                this.imTrolling = true;
+            } else {
+                this.imTrolling = false;
+            }
         }
 
         newGame(): void {
@@ -114,6 +138,7 @@
 
         listenerKeyword({code, key}: customType.LetterPress): void {
             if(this.ingame){
+                if(this.isShowingAlert) return;
 
                 if(code != 'Enter' && code != 'Backspace' && (code.startsWith('Key') || code == 'Backslash')){
                     this.pushLetter(key.toUpperCase())
@@ -121,7 +146,8 @@
                 
                 if (code == 'Enter') {
                     if (this.rowLetters[this.rowLetters.length - 1][4].letter == '') {
-                        Swal.fire(
+                        this.toggleModal(
+                            true,
                             'Tienes que completar la palabra',
                             'No puedes dejar celdas vacías, porfavor acaba de escribir la palabra',
                             'error'
@@ -260,6 +286,13 @@
             }
 
             this.rowLetters[rowLetter][index-1].letter = ''
+        }
+
+        toggleModal(state = false, title = "", desc = "", type = ""): void {
+            this.isShowingAlert = state;
+            this.titleSwal = title;
+            this.descSwal = desc;
+            this.typeSwal = type
         }
 
         timedCount() {
