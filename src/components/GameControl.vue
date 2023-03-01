@@ -53,8 +53,8 @@
         
         title: String = 'WORDLE'
         diccionari: String[] = dic
-        misteryWord: String = 'BARRO'
-        contador: number = 1
+        misteryWord: String = ''
+        contador: number = 0
         time_counter: number = 0
         timeout: number = 0
         timer_on: boolean = false
@@ -64,8 +64,8 @@
         tryies_better_game : number = 0
         time_better_game : number = 0
 
-        showLogin: boolean = false
-        showLanding: boolean = true
+        showLogin: boolean = true
+        showLanding: boolean = false
 
         ingame: boolean = true
 
@@ -82,23 +82,32 @@
             if (this.profile.name && this.profile.email && this.profile.tel) {
                 this.showLogin = false
                 this.showLanding = true
+                this.newGame();
             }   
+
+        
         }
 
         newGame(): void {
+            this.rowLetters = [];
+            this.palabra()
+            this.addRow()
+            this.contador = 1;
+            this.time_counter = 0
+            this.timeout = 0
+            this.startCount()
+            
             this.ingame = true
         }
 
         created(): void {
-            this.addRow()
             $(document).on("keyup", this.listenerKeyword);
-            console.log(this.misteryWord)
-            this.startCount()
         }
 
         palabra(): void {
             let randomNumber =  Math.floor(Math.random() * this.diccionari.length);
             this.misteryWord = this.diccionari[randomNumber].toUpperCase()
+            console.log(this.misteryWord)
         }
 
         listenerKeyword({code, key}: customType.LetterPress): void {
