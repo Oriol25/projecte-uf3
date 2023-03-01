@@ -49,8 +49,8 @@
                     const nameInput = Swal.getPopup()?.querySelector('#name') as HTMLInputElement
                     const emailInput = Swal.getPopup()?.querySelector('#email') as HTMLInputElement
                     const telInput = Swal.getPopup()?.querySelector('#tel') as HTMLInputElement
-                    if (this.validateName(nameInput.value) || this.validateEmail(emailInput.value) || this.validateTel(telInput.value)) {
-                        Swal.showValidationMessage(`Dades incorrectes`)
+                    if (this.validateData(nameInput.value, emailInput.value, telInput.value)) {
+                        Swal.showValidationMessage(this.errors.join("<br>"))
                     }
                     return { name: nameInput.value, email: emailInput.value, tel: telInput.value }
                 },
@@ -62,24 +62,61 @@
             })
         }
 
-        validateName(name: String): boolean {  
+
+
+        validateName(name: String) {  
             if (!name) {
-                return true
+                this.errors.push("El campo nombre és obligatorio"); 
+                return;
             }
+
+            if (!name.match(/^[A-Z][a-z]{1,}$/)) {
+                this.errors.push("Nombre incorrecto, ejemplo: Samuel")
+                return;
+            }  
+        }
+
+        validateEmail(email: String) {
+            if (!email) {
+                this.errors.push("El campo email es obligatorio");
+                return;
+            }
+
+            if(!email.match(/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/)){
+                this.errors.push("Email no és válido");
+                return;
+            }
+
+            
+
+        }
+
+        validateTel(tel: String): boolean {
+            if (!tel) {
+                this.errors.push("El campo teléfono es obligatorio");
+                return true;
+            }
+
+            if (!parseInt(tel as string)) {
+                this.errors.push("El campo teléfono debe contener números");
+                return true;
+            }
+
+            if (tel.length != 9) {
+                this.errors.push("El campo teléfono debe contener 9 números");
+                return true;
+            }
+            
             return false
         }
 
-        validateEmail(email: String): boolean {
-            /* if (!email && !email.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)) {
-                return true
-            } */
-            return false
-        }
-        validateTel(tel: String): boolean {
-            /* if (!tel || isNaN(tel) || tel.length != 9) {
-                return true
-            } */
-            return false
+        validateData(name: String, email: String, tel: String) : boolean{
+            this.errors = [];
+            this.validateName(name);
+            this.validateEmail(email);
+            this.validateTel(tel);
+
+            return (this.errors.length != 0);
         }
 
     }
