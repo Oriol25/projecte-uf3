@@ -175,7 +175,7 @@
                                 this.tryies_better_game = this.contador
                             }
 
-                            if(this.time_better_game <= this.time_counter){
+                            if(this.time_counter <= this.time_better_game){
                                 this.time_better_game = this.time_counter
                             }
 
