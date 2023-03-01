@@ -3,13 +3,13 @@
         <!-- NAV -->
         <header class="nav-game">
             <!-- STATISTICS -->
-            <span><i class="fa-solid fa-chart-column fa-2xl"></i></span>
+            <span @click="showStats"><i class="fa-solid fa-chart-column fa-2xl"></i></span>
             <!-- TITLE -->
             <h3>{{title}}</h3>
             <!-- RELOAD GAME & HELP -->
             <div class="buttons">
-                <span><i class="fa-solid fa-arrows-rotate fa-2xl"></i></span>
-                <span><i class="fa-sharp fa-solid fa-question fa-2xl"></i></span>
+                <span @click="newGame"><i class="fa-solid fa-arrows-rotate fa-2xl"></i></span>
+                <span @click="showInformation"><i class="fa-sharp fa-solid fa-question fa-2xl"></i></span>
             </div>
         </header>
 
@@ -38,6 +38,7 @@
     import { Prop } from 'vue-property-decorator';
     import Keyboard from './Keyboard.vue';
     import Row from './Row.vue'
+    import Swal from 'sweetalert2'
 
     /************* TYPES **************/
     import { RowLetter } from '../types/types'
@@ -53,7 +54,12 @@
         
         @Prop() readonly rowletters!: RowLetter[]
         @Prop() readonly title!: String
+        @Prop() readonly winned_games_counter!: Number
+        @Prop() readonly tryies_better_game!: Number
+        @Prop() readonly time_better_game!: Number
         
+        game_counter : number = 1
+
         created() {
 
         }
@@ -61,7 +67,32 @@
         listenerKeywordScreen(letter: string): void {
             this.$emit('keywordletter', letter)
         }
-        
+
+        showInformation(): void {
+            Swal.fire({
+                icon: 'info',
+                title: '¿Como jugar al WordleIBC?',
+                html: '<img src="./img/info_ok.jpg"/>',
+            })
+        }
+
+        newGame(): void {
+            this.game_counter++
+            this.$emit('newGame', true)
+        }
+
+        showStats() : void {
+            Swal.fire({
+                icon: 'info',
+                title: 'Estadísticas',
+                html: `Nombre del jugador: <br>
+                       Partidas realizadas: ${this.game_counter} <br>
+                       Partidas ganadas: ${this.winned_games_counter} <br>
+                       Mejor partida: ${this.tryies_better_game} <br>
+                       Partida mas rapida: ${this.time_better_game}`,
+            })
+        }
+
     }
 </script>
 
