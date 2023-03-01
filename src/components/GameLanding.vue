@@ -52,6 +52,7 @@
         
         @Prop() readonly rowletters!: RowLetter[]
         @Prop() readonly title!: String
+        @Prop() readonly profile_name!: String
         @Prop() readonly winned_games_counter!: Number
         @Prop() readonly tryies_better_game!: Number
         @Prop() readonly time_better_game!: Number
@@ -83,7 +84,7 @@
             Swal.fire({
                 icon: 'info',
                 title: 'Estadísticas',
-                html: `Nombre del jugador: <br>
+                html: `Nombre del jugador: ${this.profile_name} <br>
                        Partidas realizadas: ${this.game_counter} <br>
                        Partidas ganadas: ${this.winned_games_counter} <br>
                        Mejor partida: ${this.tryies_better_game} intentos<br>

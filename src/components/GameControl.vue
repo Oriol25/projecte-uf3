@@ -11,6 +11,7 @@
             :winned_games_counter="winned_games_counter"
             :tryies_better_game="tryies_better_game"
             :time_better_game="time_better_game"
+            :profile_name="profile.name"
             @keywordletter = "listenerKeyword"
             @newGame = "newGame"
         />
@@ -67,7 +68,8 @@
         showLogin: boolean = true
         showLanding: boolean = false
 
-        ingame: boolean = true
+        ingame: boolean = false
+        first_stats : boolean = true
 
         profile: customType.Person = {
             name: '',
@@ -112,11 +114,8 @@
 
         listenerKeyword({code, key}: customType.LetterPress): void {
             if(this.ingame){
-                if (false) { // DURANTE LOS SWAL NO PODER ESCRIBIR
-                    return;
-                }
 
-                if(code != 'Enter' && code != 'Backspace' && code.startsWith('Key')){
+                if(code != 'Enter' && code != 'Backspace' && (code.startsWith('Key') || code == 'Backslash')){
                     this.pushLetter(key.toUpperCase())
                 }
                 
@@ -171,11 +170,18 @@
                                 'success'
                             )
                             this.winned_games_counter++
-                            if(this.tryies_better_game <= this.contador){
+                            
+                            if(this.first_stats){
+                                this.tryies_better_game = this.contador
+                                this.time_better_game = this.time_counter
+                                this.first_stats = false
+                            }
+
+                            if(this.tryies_better_game >= this.contador){
                                 this.tryies_better_game = this.contador
                             }
 
-                            if(this.time_counter <= this.time_better_game){
+                            if(this.time_better_game >= this.time_counter){
                                 this.time_better_game = this.time_counter
                             }
 
