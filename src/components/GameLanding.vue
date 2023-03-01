@@ -86,8 +86,8 @@
                 html: `Nombre del jugador: <br>
                        Partidas realizadas: ${this.game_counter} <br>
                        Partidas ganadas: ${this.winned_games_counter} <br>
-                       Mejor partida: ${this.tryies_better_game} <br>
-                       Partida mas rapida: ${this.time_better_game}`,
+                       Mejor partida: ${this.tryies_better_game} intentos<br>
+                       Partida mas rapida: ${this.time_better_game} segundos`,
             })
         }
 

@@ -121,7 +121,7 @@
                         return;
                     }
 
-                    if (this.rowLetters.length < 6) {
+                    if (this.rowLetters.length < 7) {
                         let splitMisteryWord = this.misteryWord.split("")
                         let splitWord: any[] = []; // TODO: TYPE
                         
@@ -174,15 +174,17 @@
                             return;
                         }
                         this.contador++
-                        this.addRow()
-                    } else {
-                        Swal.fire(
-                                'Ups! Has perdido!',
-                                `Vuelve a intentarlo`,
-                                'error'
-                            )
-                        this.ingame = false
-                        return;
+                        if(this.rowLetters.length < 6){
+                            this.addRow()
+                        } else {
+                            Swal.fire(
+                                    'Ups! Has perdido!',
+                                    `Vuelve a intentarlo`,
+                                    'error'
+                                )
+                            this.ingame = false
+                            return;
+                        }
                     }
                 }
 
