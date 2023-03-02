@@ -46,15 +46,15 @@
     }
 
     .warning {
-        background: yellow;
+        background: orange;
     }
 
     .success {
-        background: green;
+        background: #21b011;
     }
 
     .default_error {
-        background: rgb(95, 95, 95);
+        background: rgba(95, 95, 95, 0.796);
     }
 
 

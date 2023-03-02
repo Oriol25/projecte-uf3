@@ -8,7 +8,12 @@
             v-if="showLanding"
             :rowletters="rowLetters"
             :title="title"
+            :winned_games_counter="winned_games_counter"
+            :tryies_better_game="tryies_better_game"
+            :time_better_game="time_better_game"
+            :profile_name="profile.name"
             @keywordletter = "listenerKeyword"
+            @newGame = "newGame"
         />
     </div>
 
@@ -49,14 +54,22 @@
         
         title: String = 'WORDLE'
         diccionari: String[] = dic
-        misteryWord: String = 'BARRO'
-        contador: number = 1
+        misteryWord: String = ''
+        contador: number = 0
         time_counter: number = 0
         timeout: number = 0
         timer_on: boolean = false
 
-        showLogin: boolean = false
-        showLanding: boolean = true
+        // GAME STATS
+        winned_games_counter : number = 0
+        tryies_better_game : number = 0
+        time_better_game : number = 0
+
+        showLogin: boolean = true
+        showLanding: boolean = false
+
+        ingame: boolean = false
+        first_stats : boolean = true
 
         profile: customType.Person = {
             name: '',
@@ -71,96 +84,132 @@
             if (this.profile.name && this.profile.email && this.profile.tel) {
                 this.showLogin = false
                 this.showLanding = true
+                this.newGame();
             }   
+
+        
+        }
+
+        newGame(): void {
+            this.rowLetters = [];
+            this.palabra()
+            this.addRow()
+            this.contador = 1;
+            this.time_counter = 0
+            this.timeout = 0
+            this.startCount()
+            
+            this.ingame = true
         }
 
         created(): void {
-            this.addRow()
             $(document).on("keyup", this.listenerKeyword);
-            console.log(this.misteryWord)
-            this.startCount()
         }
 
         palabra(): void {
             let randomNumber =  Math.floor(Math.random() * this.diccionari.length);
             this.misteryWord = this.diccionari[randomNumber].toUpperCase()
+            console.log(this.misteryWord)
         }
 
         listenerKeyword({code, key}: customType.LetterPress): void {
-            if (false) { // DURANTE LOS SWAL NO PODER ESCRIBIR
-                return;
-            }
+            if(this.ingame){
 
-            if(code != 'Enter' && code != 'Backspace' && code.startsWith('Key')){
-                this.pushLetter(key.toUpperCase())
-            }
-            
-            if (code == 'Enter') {
-                if (this.rowLetters[this.rowLetters.length - 1][4].letter == '') {
-                    Swal.fire(
-                        'Tienes que completar la palabra',
-                        'No puedes dejar celdas vacías, porfavor acaba de escribir la palabra',
-                        'error'
-                    )
-                    return;
+                if(code != 'Enter' && code != 'Backspace' && (code.startsWith('Key') || code == 'Backslash')){
+                    this.pushLetter(key.toUpperCase())
                 }
-
-                if (this.rowLetters.length < 6) {
-                    let splitMisteryWord = this.misteryWord.split("")
-                    let splitWord: any[] = []; // TODO: TYPE
-                    
-                    splitMisteryWord.forEach((element, index) => {
-                        splitWord.push(this.rowLetters[this.rowLetters.length - 1][index].letter)
-                    })
-                    
-                    if(this.diccionari.indexOf(splitWord.join("").toLowerCase()) == -1) {
+                
+                if (code == 'Enter') {
+                    if (this.rowLetters[this.rowLetters.length - 1][4].letter == '') {
                         Swal.fire(
-                            'Esta palabra no existe en el diccionario',
-                            '',
+                            'Tienes que completar la palabra',
+                            'No puedes dejar celdas vacías, porfavor acaba de escribir la palabra',
                             'error'
                         )
-
                         return;
                     }
 
-                    let perfectMatch : any[] = []; // aquí guardamos los elementos exactos
-                    let almostMatch : any[] = []; 
+                    if (this.rowLetters.length < 7) {
+                        let splitMisteryWord = this.misteryWord.split("")
+                        let splitWord: any[] = []; // TODO: TYPE
+                        
+                        splitMisteryWord.forEach((element, index) => {
+                            splitWord.push(this.rowLetters[this.rowLetters.length - 1][index].letter)
+                        })
+                        
+                        if(this.diccionari.indexOf(splitWord.join("").toLowerCase()) == -1) {
+                            Swal.fire(
+                                'Esta palabra no existe en el diccionario',
+                                '',
+                                'error'
+                            )
 
-                    splitWord.forEach((elemento, indice) => {
-                        if (elemento == splitMisteryWord[indice]) {
-                            perfectMatch.push(elemento);
-                            this.rowLetters[this.rowLetters.length - 1][indice].status = "success"  // existe en esa misma posición
-                        } else if (splitMisteryWord.indexOf(elemento) > -1) {
-                            almostMatch.push(elemento);  // existe pero en otra posición
-                            this.rowLetters[this.rowLetters.length - 1][indice].status = "warning"  // existe en esa misma posición
-                        } else {
-                            this.rowLetters[this.rowLetters.length - 1][indice].status = "default_error"
+                            return;
                         }
-                    });
 
-                    if (perfectMatch.length == splitWord.length) { // HE GANADO?
-                        this.stopCount()
-                        Swal.fire(
-                            'Enhorabuena! Has ganado!',
-                            `Lo has conseguido en ${this.contador} intentos  <br> y en ${this.time_counter} segundos`,
-                            'success'
-                        )
+                        let perfectMatch : any[] = []; // aquí guardamos los elementos exactos
+                        let almostMatch : any[] = []; 
+
+                        splitWord.forEach((elemento, indice) => {
+                            if (elemento == splitMisteryWord[indice]) {
+                                perfectMatch.push(elemento);
+                                this.rowLetters[this.rowLetters.length - 1][indice].status = "success"  // existe en esa misma posición
+                            } else if (splitMisteryWord.indexOf(elemento) > -1) {
+                                almostMatch.push(elemento);  // existe pero en otra posición
+                                this.rowLetters[this.rowLetters.length - 1][indice].status = "warning"  // existe en esa misma posición
+                            } else {
+                                this.rowLetters[this.rowLetters.length - 1][indice].status = "default_error"
+                            }
+                        });
+
+                        if (perfectMatch.length == splitWord.length) { // HE GANADO?
+                            this.stopCount()
+                            Swal.fire(
+                                'Enhorabuena! Has ganado!',
+                                `Lo has conseguido en ${this.contador} intentos  <br> y en ${this.time_counter} segundos`,
+                                'success'
+                            )
+                            this.winned_games_counter++
+                            
+                            if(this.first_stats){
+                                this.tryies_better_game = this.contador
+                                this.time_better_game = this.time_counter
+                                this.first_stats = false
+                            }
+
+                            if(this.tryies_better_game >= this.contador){
+                                this.tryies_better_game = this.contador
+                            }
+
+                            if(this.time_better_game >= this.time_counter){
+                                this.time_better_game = this.time_counter
+                            }
+
+                            this.ingame = false
+                            return;
+                        }
+                        this.contador++
+                        if(this.rowLetters.length < 6){
+                            this.addRow()
+                        } else {
+                            Swal.fire(
+                                    'Ups! Has perdido!',
+                                    `Vuelve a intentarlo`,
+                                    'error'
+                                )
+                            this.ingame = false
+                            return;
+                        }
+                    }
+                }
+
+                if (code == 'Backspace'){
+                    if (this.rowLetters[this.rowLetters.length - 1][0].letter == '') {
                         return;
                     }
-                    this.contador++
-                    this.addRow()
-                } else {
-                    alert('HAS  PERDIDO');
-                    return;
-                }
-            }
 
-            if (code == 'Backspace'){
-                if (this.rowLetters[this.rowLetters.length - 1][0].letter == '') {
-                    return;
+                    this.unpushLetter()
                 }
-
-                this.unpushLetter()
             }
         }
 
